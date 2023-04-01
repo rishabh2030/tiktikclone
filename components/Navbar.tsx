@@ -6,24 +6,28 @@ import { AiOutlineLogout } from "react-icons/ai";
 import { BiSearch } from "react-icons/bi";
 import { IoMdAdd } from "react-icons/io";
 import Logo from "../utils/tiktik-logo.png";
-
+import { IUser } from "../types";
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import { createOrGetUser } from "../utils";
 
 import useAuthStore from "../store/authStore";
 
 const Navbar = () => {
+  const [user, setUser] = useState<IUser | null>();
   const { userProfile, addUser, removeUser } = useAuthStore();
   const [searchValue, setSearchValue] = useState("");
   const router = useRouter();
 
-  const handleSearch = (e: {preventDefault: () => void }) => {
+  useEffect(() => {
+    setUser(userProfile);
+  }, [userProfile]);
+
+  const handleSearch = (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    if(searchValue){
+    if (searchValue) {
       router.push(`/search/${searchValue}`);
     }
-
   };
 
   return (
@@ -55,14 +59,13 @@ const Navbar = () => {
             onClick={handleSearch}
             className="absolute md:right-5 right-6 top-4 border-l-2 border-gray-300 pl-4 text-2xl text-gray-400"
           >
-         
             <BiSearch />
           </button>
         </form>
       </div>
 
       <div>
-        {userProfile ? (
+        {user ? (
           <div className="flex gap-5 md:gap-10">
             <Link href="/upload">
               <button className="border-2 rounded-md px-2 md:px-4 text-md font-semibold flex items-center gap-2 ">
@@ -70,17 +73,17 @@ const Navbar = () => {
                 <span className="hidden md:block">Upload</span>
               </button>
             </Link>
-            {userProfile.image && (
-              <Link href="/">
-                <>
+            {user.image && (
+              <Link href={`/profile/${user._id}`}>
+                
                   <Image
                     width={40}
                     height={40}
                     className="rounded-full cursor-pointer"
-                    src={userProfile.image}
+                    src={user.image}
                     alt="profile photo"
                   />
-                </>
+                
               </Link>
             )}
             <button

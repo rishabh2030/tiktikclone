@@ -25,8 +25,8 @@ const Detail = ({ postDetails }: IProps) => {
   const { userProfile }: any = useAuthStore();
 
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [comment,setComment] = useState("");
-  const [isPostingComment,setIsPostingComment] = useState(false);
+  const [comment, setComment] = useState<string>("");
+  const [isPostingComment, setIsPostingComment] = useState(false);
 
   const router = useRouter();
 
@@ -48,31 +48,31 @@ const Detail = ({ postDetails }: IProps) => {
 
   const handleLike = async (like: boolean) => {
     if (userProfile) {
-      const {data} = await axios.put(`${BASE_URL}/api/like`, {
+      const { data } = await axios.put(`${BASE_URL}/api/like`, {
         userId: userProfile._id,
         postId: post._id,
         like,
-      })
+      });
 
-      setPost({...post, likes: data.likes})
+      setPost({ ...post, likes: data.likes });
     }
   };
 
-  const addComment = async (e) => {
+  const addComment = async (e: any) => {
     e.preventDefault();
-    if(userProfile && comment){
+    if (userProfile && comment) {
       setIsPostingComment(true);
-      
-      const {data} = await axios.put(`${BASE_URL}/api/post/${post._id}`, {
+
+      const { data } = await axios.put(`${BASE_URL}/api/post/${post._id}`, {
         userId: userProfile._id,
         comment,
-      })
+      });
 
-      setPost({...post, comments: data.comments});
+      setPost({ ...post, comments: data.comments });
       setComment("");
       setIsPostingComment(false);
     }
-  }
+  };
 
   if (!post) return null;
 
@@ -151,19 +151,20 @@ const Detail = ({ postDetails }: IProps) => {
           </div>
           <p className="px-10 mt-1 text-lg text-gray-600">{post.caption}</p>
           <div className="mt-10 px-10">
-          {userProfile && <LikeButton
-                  likes={post.likes}
-        
-                  handleLike={() => handleLike(true)}
-                  handleDislike={() => handleLike(false)}
-                />}
+            {userProfile && (
+              <LikeButton
+                likes={post.likes}
+                handleLike={() => handleLike(true)}
+                handleDislike={() => handleLike(false)}
+              />
+            )}
             <div>
-              <Comments 
-              comment = {comment}
-              setComment = {setComment}
-              addComment ={addComment}
-              comments = {post.comments}
-              isPostingComment = {isPostingComment}
+              <Comments
+                comment={comment}
+                setComment={setComment}
+                addComment={addComment}
+                comments={post.comments}
+                isPostingComment={isPostingComment}
               />
             </div>
           </div>

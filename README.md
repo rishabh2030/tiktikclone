@@ -10,7 +10,7 @@ yarn dev
 ```
 
 # Important 
-To run this local you must have an .env file and inside that have 3 variables
+To run this local you must have an .env file and inside that have 3 variables:</br>
 NEXT_PUBLIC_SANITY_TOKEN take from sanity.io api </br>
 
 NEXT_PUBLIC_GOOGLE_API_TOKEN take from google cloud O2Auth  </br>
